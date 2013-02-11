@@ -28,9 +28,9 @@ Creature = function () {
     this.dirV.normalize();
 
     // parts of the body
-    this.mouthR = 1 + Math.random() * 3;
-    this.eyeR = 1 + Math.random() * 3;
-    this.tailR = 1 + Math.random() * 3;
+    this.mouthR = 1; //+ Math.random() * 2;
+    this.eyeR = 1; //+ Math.random() * 2;
+    this.tailR = 1;// + Math.random() * 2;
 
     // calculation of basic parameters
     this.visionR = this.eyeR * VISION_DISTANCE;
@@ -76,7 +76,6 @@ Creature.prototype.BiteStranger = function (prey) {
                 this.food_counter += prey.eyeR;
                 // deletre prey from array
                 prey.IsDead = true;
-                //ecosystem.creatures.splice(ecosystem.creatures.indexOf(prey), 1);
                 return;
             }
         }
@@ -110,13 +109,7 @@ Creature.prototype.CatchFood = function (food, dirTo) {
     dirTo.multiply(dR);
     this.dirAccel.add(dirTo);
 
-/*    this.dirV.add(dirTo);
-    this.dirV.normalize();
-    this.velF += acceleration;
-    if (this.velF > MAX_SPEED) {
-        this.velF = MAX_SPEED;
-    }
-    */
+
 }
 
 
@@ -150,14 +143,6 @@ Creature.prototype.Behave = function (stranger, dirTo) {
     if (iambigger)  this.dirAccel.add(dirTo);
     else this.dirAccel.subtract(dirTo);
 
-    /*
-    dirTo.normalize();
-    dirTo.multiply(dR);
-    if (iambigger) this.dirV.add(dirTo); else this.dirV.subtract(dirTo);
-    this.dirV.normalize();
-    this.velF += acceleration;
-    if (this.velF > MAX_SPEED) this.velF = MAX_SPEED;
-    */
 }
 
 Creature.prototype.Vision = function () {
@@ -232,10 +217,28 @@ Creature.prototype.Calculate = function () {
     p.add(v);
 
     // Collision detection and response
-    if ((p.x <= 0 && v.x < 0) || (p.x >= canvas.width && v.x > 0))
+    if (p.x <= 0 && v.x < 0) {
         this.dirV.x = -this.dirV.x;
-    if ((p.y <= 0 && v.y < 0) || (p.y >= canvas.height && v.y > 0))
+        p.x = 0;
+    }
+
+    if (p.x >= canvas.width && v.x > 0) {
+        this.dirV.x = -this.dirV.x;
+        p.x = canvas.width;
+    }
+
+    if (p.y <= 0 && v.y < 0) {
+        p.y = 0;
         this.dirV.y = -this.dirV.y;
+    }
+
+    if (p.y >= canvas.height && v.y > 0) {
+        p.y = canvas.height;
+        this.dirV.y = -this.dirV.y;
+    }
+
+
+
 
 
     if (this.invulnearability_timer <= 0) this.Vision();
@@ -258,8 +261,11 @@ Creature.prototype.Calculate = function () {
 
 Creature.prototype.Draw = function () {
     var p = this.pos;
-    var mouthP = p.add(this.dirV.multiply(this.mouthR + this.eyeR, 1), 1);
-    var tailP = p.add(this.dirV.multiply(-this.tailR - this.eyeR, 1), 1);
+    var mouthP = this.dirV.multiply(this.mouthR + this.eyeR, 1);
+    var tailP = this.dirV.multiply(-this.tailR - this.eyeR, 1);
+
+    ctx.setTransform(1, 0, 0, 1,0, 0);
+    ctx.translate(p.x, p.y);
 
     var transitColor = "#888888";
     if (this.IsNewborn) transitColor = "yellow";
@@ -275,7 +281,7 @@ Creature.prototype.Draw = function () {
     ctx.fillStyle = "blue";
     if (this.invulnearability_timer > 0) ctx.fillStyle = transitColor;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, this.eyeR, 0, 2 * Math.PI);
+    ctx.arc(0, 0, this.eyeR, 0, 2 * Math.PI);
     ctx.fill();
 
     // tail

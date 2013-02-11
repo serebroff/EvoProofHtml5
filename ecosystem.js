@@ -40,6 +40,7 @@ Ecosystem.prototype.Render = function () {
         this.creatures[i].Draw();
     }
 
+   ctx.setTransform(1, 0, 0, 1, 0, 0);
    for (i = 0; i < this.food.length; i++) {
         this.food[i].Draw();
     }
