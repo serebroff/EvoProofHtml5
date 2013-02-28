@@ -3,7 +3,7 @@
 //-------------------------------------------------------
 
 var MAX_CREATURES = 256;
-var MAX_FOOD = 64;
+var MAX_FOOD = 150;
 
 Ecosystem = function () {
     var i;

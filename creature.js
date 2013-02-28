@@ -2,7 +2,7 @@
 // class of living creature
 //-------------------------------------------------------
 
-var VISION_DISTANCE = 30;
+var VISION_DISTANCE = 20;
 var BRAKING = 0.85;
 var MIN_SPEED = 0.99;
 var MAX_SPEED = 25.0;
@@ -28,9 +28,9 @@ Creature = function () {
     this.dirV.normalize();
 
     // parts of the body
-    this.mouthR = 1; //+ Math.random() * 2;
-    this.eyeR = 1; //+ Math.random() * 2;
-    this.tailR = 1;// + Math.random() * 2;
+    this.mouthR = 1 + Math.random() * 1;
+    this.eyeR = 1 + Math.random() * 1;
+    this.tailR = 1 + Math.random() * 1;
 
     // calculation of basic parameters
     this.visionR = this.eyeR * VISION_DISTANCE;
@@ -74,7 +74,7 @@ Creature.prototype.BiteStranger = function (prey) {
             if (prey.eyeR <= 0) {
                 // return back a part of negative pray mass
                 this.food_counter += prey.eyeR;
-                // deletre prey from array
+                // delete prey from array
                 prey.IsDead = true;
                 return;
             }
@@ -115,7 +115,7 @@ Creature.prototype.CatchFood = function (food, dirTo) {
 
 // Behave to specified stranger
 Creature.prototype.Behave = function (stranger, dirTo) {
-    var iambigger = true;
+    var runaway = false;
     var dist = dirTo.length();
 
     var max_dist = this.eyeR * VISION_DISTANCE;
@@ -127,11 +127,12 @@ Creature.prototype.Behave = function (stranger, dirTo) {
     if (stranger.mouthR == 0 && this.mouthR == 0) return;
 
     // we are smaller
-    if (this.mouthR <= stranger.mouthR) iambigger = false;
+    if ((this.mass < stranger.mass) && dR>0.1) runaway = true;
+    else if (this.mouthR < stranger.mouthR) runaway = true;
 
     // we have a mouth
     if ((this.mouthR > 0) && (dist < this.eyeR)   // collision?
-            && iambigger) 
+            && (this.mouthR > stranger.mouthR)) // our mouth is bigger
             {
             this.BiteStranger(stranger);
     }
@@ -140,7 +141,7 @@ Creature.prototype.Behave = function (stranger, dirTo) {
     // Calc a acceleration
     dirTo.normalize();
     dirTo.multiply(dR);
-    if (iambigger)  this.dirAccel.add(dirTo);
+    if (!runaway)  this.dirAccel.add(dirTo);
     else this.dirAccel.subtract(dirTo);
 
 }
@@ -200,11 +201,11 @@ Creature.prototype.Calculate = function () {
 
     // apply hynger
     var fuel = this.dirAccel.length();
-    this.food_counter -= fuel * 0.005;
+    this.food_counter -= fuel * 0.05;
     if (this.food_counter < 0) {
         this.food_counter = 0;
         // delete creture from array
-        //       this.IsDead = true;
+         this.IsDead = true;
     }
     this.dirAccel.set(0, 0);
 

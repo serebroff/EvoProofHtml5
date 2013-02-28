@@ -52,7 +52,7 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    canvas.onclick = CanvasOnClick;
+ //   window.onclick = CanvasOnClick;
 
     ctx = canvas.getContext("2d");
     fps = new FPSMeter("fpsmeter", document.getElementById("fpscontainer"));
@@ -68,8 +68,12 @@ CanvasOnClick = function() {
 
 	if (RunPrefixMethod(document, "FullScreen") || RunPrefixMethod(document, "IsFullScreen")) {
 		RunPrefixMethod(document, "CancelFullScreen");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        scr=document.getElementById("screen");
+        canvas.width = 800;//scr.width;
+        canvas.height = 600; //scr.height;
+
+        //canvas.width = window.innerWidth;
+        //canvas.height = window.innerHeight;
 	}
 	else {
 		RunPrefixMethod(canvas, "RequestFullScreen");
