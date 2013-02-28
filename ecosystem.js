@@ -10,6 +10,7 @@ Ecosystem = function () {
     this.creatures = []; //new Array();
     for (i = 0; i < MAX_CREATURES; i++) {
         this.creatures[i] = new Creature;
+        this.creatures[i].Prerender();
     }
 
     this.food = new Array();

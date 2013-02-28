@@ -21,7 +21,7 @@ Creature = function () {
     // directions and velocity 
     this.dirV = Vec2(Math.random(), Math.random());
     this.velF = Math.random() + 1;
-    this.dirAccel = Vec2(0, 0)
+    this.dirAccel = Vec2(0, 0);
 
     if (Math.random() > 0.5) this.dirV.x *= -1;
     if (Math.random() > 0.5) this.dirV.y *= -1;
@@ -41,7 +41,42 @@ Creature = function () {
     this.life_timer = LIVE_TIME;
     this.IsNewborn = false;
     this.IsDead = false;
-}
+
+    // prerender stuff
+    this.bitmapCanvas = document.createElement('canvas');
+
+};
+
+Creature.prototype.Prerender = function()
+{
+
+
+    var mouthP = Vec2(this.mouthR + this.eyeR, 0);
+    var tailP = Vec2(-this.tailR - this.eyeR, 0);
+
+    this.bitmapCanvas.width = this.mass;
+    this.bitmapCanvas.height = this.mass;
+    this.m_context = this.bitmapCanvas.getContext('2d');
+    var c=this.m_context;
+
+    // mouth
+    c.fillStyle = "red";
+    c.beginPath();
+    c.arc(mouthP.x, mouthP.y, this.mouthR, 0, 2 * Math.PI);
+    c.fill();
+
+    // eye
+    c.fillStyle = "blue";
+    c.beginPath();
+    c.arc(0, 0, this.eyeR, 0, 2 * Math.PI);
+    c.fill();
+
+    // tail
+    c.fillStyle = "black";
+    c.beginPath();
+    c.arc(tailP.x, tailP.y, this.tailR, 0, 2 * Math.PI);
+    c.fill();
+};
 
 Creature.prototype.GiveBrith = function () {
     var cs = ecosystem.creatures;
@@ -59,6 +94,7 @@ Creature.prototype.GiveBrith = function () {
     newborn.food_counter = newborn.mass;
     newborn.velF = 0;
     newborn.IsNewborn = true;
+    newborn.Prerender();
 }
 
 Creature.prototype.BiteStranger = function (prey) {
@@ -267,7 +303,8 @@ Creature.prototype.Draw = function () {
 
     ctx.setTransform(1, 0, 0, 1,0, 0);
     ctx.translate(p.x, p.y);
-
+    ctx.drawImage(this.bitmapCanvas,0,0);
+  /*
     var transitColor = "#888888";
     if (this.IsNewborn) transitColor = "yellow";
 
@@ -291,5 +328,5 @@ Creature.prototype.Draw = function () {
     ctx.beginPath();
     ctx.arc(tailP.x, tailP.y, this.tailR, 0, 2 * Math.PI);
     ctx.fill();
-
-}
+    */
+}  ;
