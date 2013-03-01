@@ -7,7 +7,6 @@ var BRAKING = 0.85;
 var MIN_SPEED = 0.99;
 var MAX_SPEED = 25.0;
 var INVULNERABILITY_TIME = 1000;
-var LIVE_TIME = 8000;
 
 function rndsign()
 {
@@ -28,9 +27,9 @@ Creature = function () {
     this.dirV.normalize();
 
     // parts of the body
-    this.mouthR = 1 + Math.random() * 1;
-    this.eyeR = 1 + Math.random() * 1;
-    this.tailR = 1 + Math.random() * 1;
+    this.mouthR = 1 + Math.random() * 3;
+    this.eyeR = 1 + Math.random() * 3;
+    this.tailR = 1 + Math.random() * 3;
 
     // calculation of basic parameters
     this.visionR = this.eyeR * VISION_DISTANCE;
@@ -38,8 +37,6 @@ Creature = function () {
     this.food_counter = this.mass;
 
     this.invulnearability_timer = 0;
-    this.life_timer = LIVE_TIME;
-    this.IsNewborn = false;
     this.IsDead = false;
 
     // prerender stuff
@@ -49,15 +46,18 @@ Creature = function () {
 
 Creature.prototype.Prerender = function()
 {
+    var texture_size = Math.ceil(Math.max(this.mouthR, this.tailR)*2 +  this.eyeR ) *2 +1;
+    var mouthP = Vec2(this.mouthR + this.eyeR , 0);
+    var tailP = Vec2(-this.tailR - this.eyeR ,  0);
 
 
-    var mouthP = Vec2(this.mouthR + this.eyeR, 0);
-    var tailP = Vec2(-this.tailR - this.eyeR, 0);
 
-    this.bitmapCanvas.width = this.mass;
-    this.bitmapCanvas.height = this.mass;
-    this.m_context = this.bitmapCanvas.getContext('2d');
-    var c=this.m_context;
+    this.bitmapCanvas.width = texture_size;
+    this.bitmapCanvas.height = texture_size;
+    var c= this.bitmapCanvas.getContext('2d');
+
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.translate(texture_size/2, texture_size/2);
 
     // mouth
     c.fillStyle = "red";
@@ -95,7 +95,7 @@ Creature.prototype.GiveBrith = function () {
     newborn.velF = 0;
     newborn.IsNewborn = true;
     newborn.Prerender();
-}
+};
 
 Creature.prototype.BiteStranger = function (prey) {
     this.food_counter += this.mouthR;
@@ -123,7 +123,7 @@ Creature.prototype.BiteStranger = function (prey) {
     prey.dirV.negate();
 
 
-}
+};
 
 // Trying to catch some food
 Creature.prototype.CatchFood = function (food, dirTo) {
@@ -146,7 +146,7 @@ Creature.prototype.CatchFood = function (food, dirTo) {
     this.dirAccel.add(dirTo);
 
 
-}
+} ;
 
 
 // Behave to specified stranger
@@ -180,11 +180,11 @@ Creature.prototype.Behave = function (stranger, dirTo) {
     if (!runaway)  this.dirAccel.add(dirTo);
     else this.dirAccel.subtract(dirTo);
 
-}
+};
 
 Creature.prototype.Vision = function () {
     var cs = ecosystem.creatures;
-    var distance = new Number;
+    var distance;
     var dirToNeibour = Vec2(0, 0);
 
     this.visionR = this.eyeR * VISION_DISTANCE;
@@ -214,7 +214,7 @@ Creature.prototype.Vision = function () {
 
     }
     //*/
-}
+} ;
 
 Creature.prototype.Calculate = function () {
 
@@ -226,7 +226,7 @@ Creature.prototype.Calculate = function () {
     if (this.invulnearability_timer > 0) {
         this.invulnearability_timer -= tickperframe;
         return;
-    } else this.IsNewborn = false;
+    }
 
 
     // apply acceleration
@@ -294,18 +294,26 @@ Creature.prototype.Calculate = function () {
 
 
 
-}
+} ;
 
 Creature.prototype.Draw = function () {
+    var rot;
     var p = this.pos;
-    var mouthP = this.dirV.multiply(this.mouthR + this.eyeR, 1);
-    var tailP = this.dirV.multiply(-this.tailR - this.eyeR, 1);
 
     ctx.setTransform(1, 0, 0, 1,0, 0);
     ctx.translate(p.x, p.y);
+    rot = this.dirV.angleTo(Vec2(1, 0));
+    ctx.rotate(-rot);
+
+    ctx.translate(-this.bitmapCanvas.width/2, -this.bitmapCanvas.height/2);
+
     ctx.drawImage(this.bitmapCanvas,0,0);
   /*
-    var transitColor = "#888888";
+
+   var mouthP = this.dirV.multiply(this.mouthR + this.eyeR, 1);
+   var tailP = this.dirV.multiply(-this.tailR - this.eyeR, 1);
+
+   var transitColor = "#888888";
     if (this.IsNewborn) transitColor = "yellow";
 
     // mouth
