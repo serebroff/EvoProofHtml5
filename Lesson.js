@@ -2,14 +2,14 @@
 // Actual game code goes here.
 
 // Global vars
-fps = null; 
-canvas = null;
-ctx = null;
+var fps = null; 
+var canvas = null;
+var ctx = null;
 var mySound;
 
 // ----------------------------------------
 
-ecosystem = null;
+var ecosystem;
 
 var tickperframe = 0;
 
@@ -35,7 +35,7 @@ function GameTick(elapsed)
     ctx.setTransform(1, 0, 0, 1,0, 0);
 
     // Draw FPS
-	ctx.fillStyle = "#FF00AA";    
+    ctx.fillStyle = "#FF00AA";    
     ctx.font="15px Arial Black";
     ctx.fillText("FPS: "+ fps.str_fps,20,20);
     ctx.fillText("N: "+ ecosystem.creatures.length,20,40);
@@ -45,8 +45,8 @@ function GameTick(elapsed)
 
 window.onload = function () {
     // buzz.defaults.loop = true;
-    mySound = new buzz.sound("/res/sound.ogg");
-    mySound.loop().play();
+//    mySound = new buzz.sound("/res/sound.ogg");
+//    mySound.loop().play();
 
     canvas = document.getElementById("screen");
     canvas.width = window.innerWidth;
@@ -58,7 +58,10 @@ window.onload = function () {
     fps = new FPSMeter("fpsmeter", document.getElementById("fpscontainer"));
     ecosystem = new Ecosystem;
     GameLoopManager.run(GameTick);
-
+    canvas.onmousedown = function (e) {
+        
+        ecosystem.organism.Grow();    
+    };
 
 };
 

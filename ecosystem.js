@@ -18,12 +18,14 @@ Ecosystem = function () {
         this.food[i] = new Food;
     }
 
-}
+    this.organism = new Organism;
+
+};
 
 
 Ecosystem.prototype.Calculate = function () {
     var i;
-    for (i = 0; i < this.creatures.length; i++) {
+/*    for (i = 0; i < this.creatures.length; i++) {
         this.creatures[i].Calculate();
     }
     
@@ -32,20 +34,23 @@ Ecosystem.prototype.Calculate = function () {
             this.creatures.splice(i, 1);
         }
     }
-
-}
+*/
+};
 
 Ecosystem.prototype.Render = function () {
-    var i;
+    
+    this.organism.Draw();
+    
+/*    var i;
     for (i = 0; i < this.creatures.length; i++) {
         this.creatures[i].Draw();
     }
-
+*/
    ctx.setTransform(1, 0, 0, 1, 0, 0);
    for (i = 0; i < this.food.length; i++) {
         this.food[i].Draw();
     }
     
-}
+};
 
 

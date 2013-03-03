@@ -8,11 +8,7 @@ var MIN_SPEED = 0.99;
 var MAX_SPEED = 25.0;
 var INVULNERABILITY_TIME = 1000;
 
-function rndsign()
-{
-    if (Math.random() <= 0.5) return 1;
-    else return -1;
-}
+
 
 Creature = function () {
     this.pos = Vec2(canvas.width * Math.random(), canvas.height * Math.random());
