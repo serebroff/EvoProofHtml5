@@ -15,23 +15,31 @@
   <script src='Lesson.js'></script>
 
   <style>
-    #screen { display:block; margin:0 auto; background-color:#F0F; }
+      body {
+          font-family: courier;
+          text-align: center;
+      }
+    #screen {
+        display:block;
+        margin:0 auto;
+        background-color:#F0F;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    #DNAinput {text-align: center; font-family: courier; }
+    #tryDNA {text-align: center; font-family: courier; }
       
-    .fpsmeter {
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        text-align: center;
-    }
-    .fpsmeter p {
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
+
 
   </style>
 </head>
 <body>
-  <canvas id='screen' width='800' height='600' "></canvas>
-  <div id="fpscontainer"></div>
+  <canvas id='screen' width='800' height='600' "/></canvas>
+  <br>
+  <p/>Enter DNA code here</p>
+  <form name="DNAform" id= "DNA">
+      <input type="text" id="DNAinput" size="50" maxlength="255">
+  </form>
+  <p /><button id="tryDNA" onclick="GoButton()">Try DNA</button></p>
 </body>
 </html>

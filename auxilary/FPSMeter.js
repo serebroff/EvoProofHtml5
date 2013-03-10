@@ -2,20 +2,11 @@
 // By Javier Arevalo ////
 // FPS Meter class ///
 
-FPSMeter = function (cls, root) {
+FPSMeter = function () {
     this.fpsArray = new Array();
     this.fpsIndex = 0;
-    this.fps = document.createElement("div");
-    this.fps.setAttribute("class", cls);
-    root.appendChild(this.fps);
     this.str_fps = " ";
-    
-    this.fpst = new Array();
-    
-    for (var i = 0; i < 3; ++i)
-    {
-    this.fpst.push(this.fps.appendChild(document.createElement("p")));
-    } 
+
     
 }
 

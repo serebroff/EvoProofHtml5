@@ -181,7 +181,7 @@ Creature.prototype.Behave = function (stranger, dirTo) {
 Creature.prototype.Vision = function () {
     var cs = ecosystem.creatures;
     var distance;
-    var dirToNeibour = Vec2(0, 0);
+    var dirToNeibour;
 
     this.visionR = this.eyeR * VISION_DISTANCE;
     this.visionR *= this.visionR;
